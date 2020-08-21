@@ -9,6 +9,8 @@ import { compose } from 'redux';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
+import Breadcrumb from 'components/Breadcrumb';
+import { Container } from 'components/Container';
 import reducer from './reducer';
 import saga from './saga';
 import * as TYPE from './actionTypes';
@@ -24,8 +26,10 @@ export function ProductsPage(props) {
   }, ['componentDidMount']);
 
   return (
+    // <Container>Product List</Container>
     <>
-      <div>Product List</div>
+      <Breadcrumb />
+      <Container className="site-layout-background">Product List</Container>
     </>
   );
 }

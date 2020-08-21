@@ -16,6 +16,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import FontFaceObserver from 'fontfaceobserver';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
+import 'antd/dist/antd.css';
 
 // Import root app
 import App from 'containers/App';
@@ -55,7 +56,7 @@ const render = messages => {
         </ConnectedRouter>
       </LanguageProvider>
     </Provider>,
-    MOUNT_NODE,
+    MOUNT_NODE
   );
 };
 
@@ -77,8 +78,8 @@ if (!window.Intl) {
     .then(() =>
       Promise.all([
         import('intl/locale-data/jsonp/en.js'),
-        import('intl/locale-data/jsonp/de.js'),
-      ]),
+        import('intl/locale-data/jsonp/de.js')
+      ])
     ) // eslint-disable-line prettier/prettier
     .then(() => render(translationMessages))
     .catch(err => {
@@ -92,5 +93,15 @@ if (!window.Intl) {
 // it's not most important operation and if main code fails,
 // we do not want it installed
 if (process.env.NODE_ENV === 'production') {
-  require('offline-plugin/runtime').install(); // eslint-disable-line global-require
+  const runtime = require('offline-plugin/runtime'); // eslint-disable-line global-require
+  runtime.install({
+    onUpdateReady: () => {
+      // Tells to new SW to take control immediately
+      runtime.applyUpdate();
+    },
+    onUpdated: () => {
+      // Reload the webpage to load into the new version
+      window.location.reload();
+    }
+  });
 }
